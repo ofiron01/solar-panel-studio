@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/solar-panel-studio/static/css/main.2aef7cfb.css",
+    "main.js": "/solar-panel-studio/static/js/main.706ddc1b.js",
+    "static/js/787.594f495f.chunk.js": "/solar-panel-studio/static/js/787.594f495f.chunk.js",
+    "static/media/sat01.png": "/solar-panel-studio/static/media/sat01.1ea1fb2180bad66b95f3.png",
+    "index.html": "/solar-panel-studio/index.html",
+    "main.2aef7cfb.css.map": "/solar-panel-studio/static/css/main.2aef7cfb.css.map",
+    "main.706ddc1b.js.map": "/solar-panel-studio/static/js/main.706ddc1b.js.map",
+    "787.594f495f.chunk.js.map": "/solar-panel-studio/static/js/787.594f495f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2aef7cfb.css",
+    "static/js/main.706ddc1b.js"
+  ]
+}
