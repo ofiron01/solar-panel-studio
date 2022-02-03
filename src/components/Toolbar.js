@@ -1,6 +1,9 @@
 import styled from 'styled-components';
-import {gridBlockTypes} from "../constants";
+import {appSteps} from "../constants";
 import RangeInput from "./RangeInput";
+import {Link, useLocation} from "react-router-dom";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ToolbarWrapper = styled.div`
   position: fixed;
@@ -34,10 +37,28 @@ const ToolButton = styled.button`
   background-color: ${({bgColor}) => bgColor !== '' ? bgColor : '#ffffff'};
   box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
   border-radius: 5px;
-  border: ${({isSelected}) => isSelected ? '2px solid #313131' : 'none'};
+  border: ${({isSelected}) => isSelected ? '1px solid #313131' : 'none'};
 `;
 
+const StyledLink = styled(Link)`
+  color: #3d3d3d;
+  font-weight: bold;
+  text-decoration: underline;
+  &:hover {
+    text-decoration: none;
+  }
+`
+
+function NavLink(props) {
+    const {pathname} = useLocation();
+    if (pathname === props.to) {
+        return props.children;
+    }
+    return <StyledLink {...props} />
+}
+
 function Toolbar({
+     toolItems,
      stageZoom,
      setStageZoom,
      gridOpacity,
@@ -74,22 +95,29 @@ function Toolbar({
                         max={360}
                         step={10}
                     />
+
+                    <NavLink to={appSteps.OBSTACLES}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> Obstacles
+                    </NavLink>&nbsp;|&nbsp;
+                    <NavLink to={appSteps.BLOCKS}>
+                        Panels <FontAwesomeIcon icon={faChevronRight} />
+                    </NavLink>
             </ToolbarRow>
             <ToolbarRow>
                 {
-                    Object.values(gridBlockTypes).map(blockType => {
-                        const Icon = typeof blockType.icon === 'function'
+                    toolItems.map(item => {
+                        const Icon = typeof item.icon === 'function'
                             ? <span />
-                            : blockType.icon;
+                            : item.icon;
 
                         return (
                             <ToolButton
-                                key={blockType.id}
-                                isSelected={blockToolSelected === blockType.id}
-                                bgColor={blockType.color}
-                                onClick={() => setBlockToolSelected(blockType.id)}
+                                key={item.id}
+                                isSelected={blockToolSelected === item.id}
+                                bgColor={item.color}
+                                onClick={() => setBlockToolSelected(item.id)}
                             >
-                                {Icon}{' '}{blockType.name}
+                                {Icon}{' '}{item.name}
                             </ToolButton>
                         )
                     })
