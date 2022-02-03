@@ -2,7 +2,6 @@
   "name": "solar-panel-studio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ofiron01.github.io/solar-panel-studio",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
