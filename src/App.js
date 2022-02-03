@@ -21,7 +21,7 @@ function App({step}) {
             navigate(appSteps.OBSTACLES);
         }
         setBlockToolSelected(toolbarItemsMap[step][0].id);
-    }, [pathname])
+    }, [pathname, step, navigate])
 
     return (
         <div>
