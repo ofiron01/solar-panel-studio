@@ -74,7 +74,7 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
             setImage({width: evt.target.width, height: evt.target.height})
         }
         satImage.src = projectData.satImageUrl;
-    }, []);
+    }, [projectData.satImageUrl]);
 
     return (
         <StageWrapper>

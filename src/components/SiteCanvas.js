@@ -22,7 +22,7 @@ function SiteCanvas({width, height, coordinates}) {
         }, []);
 
         setPath(svgPath);
-    }, []);
+    }, [coordinates]);
 
     return (
         <CanvasWrapper>
