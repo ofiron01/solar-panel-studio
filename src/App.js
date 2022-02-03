@@ -2,19 +2,31 @@ import Stage from "./components/Stage";
 import RoofSatImage from "./assets/sat01.png";
 
 import data from "./mock/sat01.json";
-import {useState} from "react";
-import {gridBlockTypes} from "./constants";
+import {useEffect, useState} from "react";
+import {appSteps, toolbarItemsMap} from "./constants";
 import Toolbar from "./components/Toolbar";
+import {useNavigate, useLocation} from "react-router-dom";
 
-function App() {
+function App({step}) {
+    const {pathname} = useLocation();
+    const navigate = useNavigate();
     const [stageZoom, setStageZoom] = useState(1);
     const [gridOpacity, setGridOpacity] = useState(100);
     const [stageRotation, setStageRotation] = useState(0);
-    const [blockToolSelected, setBlockToolSelected] = useState(gridBlockTypes.LEVEL_A.id)
+    const [blockToolSelected, setBlockToolSelected] = useState(toolbarItemsMap[step][0].id);
+
+    useEffect(() => {
+        console.log(pathname);
+        if (pathname === '/') {
+            navigate(appSteps.OBSTACLES);
+        }
+        setBlockToolSelected(toolbarItemsMap[step][0].id);
+    }, [pathname])
 
     return (
         <div>
             <Stage
+                step={step}
                 zoomLevel={stageZoom}
                 gridOpacity={gridOpacity}
                 rotation={stageRotation}
@@ -24,6 +36,7 @@ function App() {
                 satImageUrl: RoofSatImage,
             }}/>
             <Toolbar
+                toolItems={toolbarItemsMap[step]}
                 gridOpacity={gridOpacity}
                 setGridOpacity={setGridOpacity}
                 stageZoom={stageZoom}

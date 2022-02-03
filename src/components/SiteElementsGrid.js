@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 const GridWrapper = styled.div`
   position: absolute;
-  z-index: 1;
   width: ${props => props.width}px;
   height: ${props => props.height}px;
-  opacity: ${props => props.opacity / 100};
+  opacity: ${props => props.isDisabled ? 0 : props.opacity / 100};
+  z-index: ${({isDisabled}) => isDisabled ? 0 : 1};
 `;
 
 const BlockWrapper = styled.div`
@@ -27,38 +27,44 @@ const BlockWrapper = styled.div`
     transform: rotate(${props => props.rotation}deg);
 `;
 
-const mapTypeToStyle = (type, blockSize, text) => {
+const mapBlockTypeToIcon = (type, blockSize, text) => {
     switch (type) {
+        case gridBlockTypes.BLOCKED.id:
+            return gridBlockTypes.BLOCKED.icon;
         case gridBlockTypes.LEVEL_A.id:
             return gridBlockTypes.LEVEL_A.icon({blockSize, text});
         case gridBlockTypes.LEVEL_B.id:
             return gridBlockTypes.LEVEL_B.icon({blockSize, text});
-        case gridBlockTypes.SHAPE_DIRECTION_LEFT.id:
-            return gridBlockTypes.SHAPE_DIRECTION_LEFT.icon;
-        case gridBlockTypes.SHAPE_DIRECTION_RIGHT.id:
-            return gridBlockTypes.SHAPE_DIRECTION_RIGHT.icon;
-        case gridBlockTypes.SHAPE_DIRECTION_TOP.id:
-            return gridBlockTypes.SHAPE_DIRECTION_TOP.icon;
-        case gridBlockTypes.SHAPE_DIRECTION_BOTTOM.id:
-            return gridBlockTypes.SHAPE_DIRECTION_BOTTOM.icon;
-        case gridBlockTypes.OBSTACLE_BOILER.id:
-            return gridBlockTypes.OBSTACLE_BOILER.icon;
-        case gridBlockTypes.OBSTACLE_AC.id:
-            return gridBlockTypes.OBSTACLE_AC.icon;
-        case gridBlockTypes.OBSTACLE_OTHER.id:
-            return gridBlockTypes.OBSTACLE_OTHER.icon;
+        case gridBlockTypes.LEVEL_C.id:
+            return gridBlockTypes.LEVEL_C.icon({blockSize, text});
+        case gridBlockTypes.LEVEL_D.id:
+            return gridBlockTypes.LEVEL_D.icon({blockSize, text});
+        case gridBlockTypes.SHAPE_DIRECTION_WEST.id:
+            return gridBlockTypes.SHAPE_DIRECTION_WEST.icon;
+        case gridBlockTypes.SHAPE_DIRECTION_EAST.id:
+            return gridBlockTypes.SHAPE_DIRECTION_EAST.icon;
+        case gridBlockTypes.SHAPE_DIRECTION_NORTH.id:
+            return gridBlockTypes.SHAPE_DIRECTION_NORTH.icon;
+        case gridBlockTypes.SHAPE_DIRECTION_SOUTH.id:
+            return gridBlockTypes.SHAPE_DIRECTION_SOUTH.icon;
         default:
             return <div />;
     }
 }
 
-function Grid({width, height, blocks, blockSize, onClick, gridOpacity, orientation}) {
+function SiteElementsGrid({width, height, blocks, blockSize, onClick, gridOpacity, orientation, isDisabled}) {
 
     return <GridWrapper
         width={width}
         height={height}
         opacity={gridOpacity}
-        onClick={onClick}>
+        isDisabled={isDisabled}
+        onClick={evt => {
+            if (isDisabled) {
+            return;
+        }
+            onClick(evt);
+        }}>
         {
             blocks.map((block, index) => {
                 const [x, y, label, type] = block;
@@ -73,7 +79,7 @@ function Grid({width, height, blocks, blockSize, onClick, gridOpacity, orientati
                         topPosition={y}
                         size={blockSize}>
                         {
-                            mapTypeToStyle(type, blockSize, levelName)
+                            mapBlockTypeToIcon(type, blockSize, levelName)
                         }
                     </BlockWrapper>
                 );
@@ -82,4 +88,4 @@ function Grid({width, height, blocks, blockSize, onClick, gridOpacity, orientati
     </GridWrapper>
 }
 
-export default Grid;
+export default SiteElementsGrid;
