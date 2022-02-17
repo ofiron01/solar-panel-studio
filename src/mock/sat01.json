@@ -83,5 +83,9 @@
 		[173,264,"unknown"],
 		[186,271.5,"unknown"]
 	],
-	"objects": []
+	"objects": [],
+	"viewZoom": 1,
+	"viewOrientation": 0,
+	"viewRoute": "/objects"
+
 }

@@ -22,7 +22,7 @@ const StageContent = styled.div`
     transform: ${({rotation, zoom}) => `rotate(${rotation}deg) scale(${zoom})`};
 `;
 
-function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, rotation}) {
+function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, rotation, handleDataChange}) {
     const [gridState, setGridState] = useState(projectData.blocks);
     const [obstaclePlacementState, setObstaclePlacementState] = useState(projectData.objects)
     const [image, setImage] = useState({width: 0, height: 0});
@@ -34,39 +34,56 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
                 index === parseInt(evt.target.parentElement.dataset.blockid)
             ) {
                 console.log(blockToolSelected);
-                block[3] = blockToolSelected;
+                block[2] = blockToolSelected;
             }
             return block;
         })
         setGridState(newGridState);
+        handleDataChange({
+            ...projectData,
+            blocks: gridState,
+        });
     }
 
     const handlePlaceObstacle = evt => {
-        // const rect = evt.target.getBoundingClientRect();
-        // const x = evt.clientX - rect.left; //x position within the element.
-        // const y = evt.clientY - rect.top;  //y position within the element.
         const x = evt.nativeEvent.offsetX;
         const y = evt.nativeEvent.offsetY;
-        console.log(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY)
+        console.log(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
+
+        let updatedObstaclePlacementState;
         if (evt.target.dataset.id !== 'obstaclesWrapper') {
             console.log(evt.target.parentElement.parentElement.dataset.id, ' is not obstaclesWrapper, removing clicked item');
-            const updatedObstaclePlacementState = obstaclePlacementState.filter(obstacle => {
+            updatedObstaclePlacementState = obstaclePlacementState.filter(obstacle => {
                 const [,,,id] = obstacle;
                 return (
                     id !== parseInt(evt.target.parentElement.dataset.id) &&
                     id !== parseInt(evt.target.parentElement.parentElement.dataset.id)
                 );
             })
-            setObstaclePlacementState(updatedObstaclePlacementState);
 
         } else {
-            setObstaclePlacementState(prevState => [
-                ...prevState,
-                [x, y, blockToolSelected, prevState.length]
-            ]);
+            updatedObstaclePlacementState = [
+                ...obstaclePlacementState,
+                [x, y, blockToolSelected, obstaclePlacementState.length]
+            ];
         }
 
+        setObstaclePlacementState(updatedObstaclePlacementState);
+        handleDataChange({
+            ...projectData,
+            objects: updatedObstaclePlacementState,
+        });
     }
+
+    //Update blocks state when blocks are updated from outside
+    useEffect(() => {
+        setGridState(projectData.blocks);
+    }, [projectData.blocks]);
+
+    //Update objects state when objects are updated from outside
+    useEffect(() => {
+        setObstaclePlacementState(projectData.objects);
+    }, [projectData.objects]);
 
     useEffect(() => {
         const satImage = new Image();
@@ -102,7 +119,7 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
                     width={image.width}
                     height={image.height}
                     obstacles={obstaclePlacementState}
-                    isDisabled={step !== appSteps.OBSTACLES}
+                    isDisabled={step !== appSteps.OBJECTS}
                 />
             </StageContent>
         </StageWrapper>

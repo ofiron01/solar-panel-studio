@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {appSteps} from "../constants";
 import RangeInput from "./RangeInput";
 import {Link, useLocation} from "react-router-dom";
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ToolbarWrapper = styled.div`
@@ -26,6 +26,7 @@ const ToolbarRow = styled.div`
   justify-content: ${({justify}) => justify ?? 'space-between'};
   flex-flow: row wrap;
   max-width: 980px;
+  align-items: center;
 `;
 
 const ToolButton = styled.button`
@@ -40,6 +41,11 @@ const ToolButton = styled.button`
   border: ${({isSelected}) => isSelected ? '1px solid #313131' : 'none'};
 `;
 
+const StyledDisabledLink = styled.span`
+  color: #3d3d3d;
+  cursor: default;
+`
+
 const StyledLink = styled(Link)`
   color: #3d3d3d;
   font-weight: bold;
@@ -52,7 +58,7 @@ const StyledLink = styled(Link)`
 function NavLink(props) {
     const {pathname} = useLocation();
     if (pathname === props.to) {
-        return props.children;
+        return <StyledDisabledLink>{props.children}</StyledDisabledLink>;
     }
     return <StyledLink {...props} />
 }
@@ -66,11 +72,12 @@ function Toolbar({
      blockToolSelected,
      setBlockToolSelected,
      stageRotation,
-     setStageRotation
+     setStageRotation,
+     setIsModalVisible
  }) {
     return (
         <ToolbarWrapper>
-            <ToolbarRow justify="flex-start">
+            <ToolbarRow>
                     <RangeInput
                         label="Zoom"
                         value={stageZoom}
@@ -96,11 +103,15 @@ function Toolbar({
                         step={10}
                     />
 
-                    <NavLink to={appSteps.OBSTACLES}>
-                        <FontAwesomeIcon icon={faChevronLeft} /> Obstacles
-                    </NavLink>&nbsp;|&nbsp;
+                    <ToolButton onClick={() => setIsModalVisible(true)}>
+                        <FontAwesomeIcon icon={faEdit} /> Edit
+                    </ToolButton>
+                    <NavLink to={appSteps.OBJECTS}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> Objects
+                    </NavLink>
+                    <div>&nbsp;|&nbsp;</div>
                     <NavLink to={appSteps.BLOCKS}>
-                        Panels <FontAwesomeIcon icon={faChevronRight} />
+                        Blocks <FontAwesomeIcon icon={faChevronRight} />
                     </NavLink>
             </ToolbarRow>
             <ToolbarRow>

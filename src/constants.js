@@ -13,7 +13,7 @@ import {
 import LevelIcon from "./components/LevelIcon";
 
 export const appSteps = {
-    OBSTACLES: '/obstacles',
+    OBJECTS: '/objects',
     BLOCKS: '/blocks',
 };
 
@@ -126,7 +126,7 @@ export const gridBlockTypes = {
 }
 
 export const toolbarItemsMap = {
-    [appSteps.OBSTACLES]: [
+    [appSteps.OBJECTS]: [
         gridBlockTypes.OBSTACLE_OTHER,
         gridBlockTypes.OBSTACLE_AC_S,
         gridBlockTypes.OBSTACLE_AC_M,
