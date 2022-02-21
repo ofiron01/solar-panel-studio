@@ -63,7 +63,7 @@ function App({step}) {
             viewRoute: pathname,
         }));
 
-    }, [pathname]);
+    }, [pathname]); //eslint-disable-line
 
     //Navigate to route when it changes in project state
     useDebouncedEffect(() => {
