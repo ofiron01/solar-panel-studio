@@ -3,13 +3,15 @@ import styled from 'styled-components';
 
 const CanvasWrapper = styled.div`
     position: absolute;
-    z-index: 0;
+    z-index: 0; 
+    pointer-events: none;
 `;
 
 const SiteCanvasSvg = styled.svg`
     fill: transparent;
     stroke: #19ffc2;
     stroke-width: 3;
+    pointer-events: none;
 `;
 
 function SiteCanvas({width, height, coordinates}) {
@@ -29,7 +31,7 @@ function SiteCanvas({width, height, coordinates}) {
             <SiteCanvasSvg
                 width={width}
                 height={height}
-                viewBox="0 0 370 370"
+                viewBox={`0 0 ${width} ${height}`}
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path d={`m${coordinates[0]},${coordinates[1]} ${path} z`}/>

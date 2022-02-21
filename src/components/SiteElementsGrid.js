@@ -67,13 +67,12 @@ function SiteElementsGrid({width, height, blocks, blockSize, onClick, gridOpacit
         }}>
         {
             blocks.map((block, index) => {
-                const [x, y, label, type] = block;
+                const [x, y, type] = block;
                 const levelName = type?.split('-')[1] ?? ''
                 return (
                     <BlockWrapper
                         data-blockid={index}
                         key={index}
-                        title={label}
                         rotation={orientation}
                         leftPosition={x}
                         topPosition={y}

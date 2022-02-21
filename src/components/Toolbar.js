@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {appSteps} from "../constants";
 import RangeInput from "./RangeInput";
 import {Link, useLocation} from "react-router-dom";
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ToolbarWrapper = styled.div`
@@ -26,9 +26,10 @@ const ToolbarRow = styled.div`
   justify-content: ${({justify}) => justify ?? 'space-between'};
   flex-flow: row wrap;
   max-width: 980px;
+  align-items: center;
 `;
 
-const ToolButton = styled.button`
+export const ToolButton = styled.button`
   width: 80px;
   height: 40px;
   margin: 5px;
@@ -38,7 +39,15 @@ const ToolButton = styled.button`
   box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
   border-radius: 5px;
   border: ${({isSelected}) => isSelected ? '1px solid #313131' : 'none'};
+  &[disabled] {
+    cursor: default;
+  }
 `;
+
+const StyledDisabledLink = styled.span`
+  color: #3d3d3d;
+  cursor: default;
+`
 
 const StyledLink = styled(Link)`
   color: #3d3d3d;
@@ -52,7 +61,7 @@ const StyledLink = styled(Link)`
 function NavLink(props) {
     const {pathname} = useLocation();
     if (pathname === props.to) {
-        return props.children;
+        return <StyledDisabledLink>{props.children}</StyledDisabledLink>;
     }
     return <StyledLink {...props} />
 }
@@ -66,63 +75,80 @@ function Toolbar({
      blockToolSelected,
      setBlockToolSelected,
      stageRotation,
-     setStageRotation
+     setStageRotation,
+     setIsModalVisible
  }) {
     return (
         <ToolbarWrapper>
-            <ToolbarRow justify="flex-start">
-                    <RangeInput
-                        label="Zoom"
-                        value={stageZoom}
-                        onChange={setStageZoom}
-                        min={1}
-                        max={10}
-                        step={1}
-                    />
-                    <RangeInput
-                        label="Opacity"
-                        value={gridOpacity}
-                        onChange={setGridOpacity}
-                        min={0}
-                        max={100}
-                        step={10}
-                    />
-                    <RangeInput
-                        label="Rotation"
-                        value={stageRotation}
-                        onChange={setStageRotation}
-                        min={0}
-                        max={360}
-                        step={10}
-                    />
-
-                    <NavLink to={appSteps.OBSTACLES}>
-                        <FontAwesomeIcon icon={faChevronLeft} /> Obstacles
-                    </NavLink>&nbsp;|&nbsp;
-                    <NavLink to={appSteps.BLOCKS}>
-                        Panels <FontAwesomeIcon icon={faChevronRight} />
-                    </NavLink>
-            </ToolbarRow>
             <ToolbarRow>
                 {
-                    toolItems.map(item => {
-                        const Icon = typeof item.icon === 'function'
-                            ? <span />
-                            : item.icon;
-
-                        return (
-                            <ToolButton
-                                key={item.id}
-                                isSelected={blockToolSelected === item.id}
-                                bgColor={item.color}
-                                onClick={() => setBlockToolSelected(item.id)}
-                            >
-                                {Icon}{' '}{item.name}
-                            </ToolButton>
-                        )
-                    })
+                    toolItems &&
+                    <>
+                        <RangeInput
+                            label="Zoom"
+                            value={stageZoom}
+                            onChange={setStageZoom}
+                            min={1}
+                            max={10}
+                            step={1}
+                        />
+                        <RangeInput
+                            label="Opacity"
+                            value={gridOpacity}
+                            onChange={setGridOpacity}
+                            min={0}
+                            max={100}
+                            step={10}
+                        />
+                        <RangeInput
+                            label="Rotation"
+                            value={stageRotation}
+                            onChange={setStageRotation}
+                            min={0}
+                            max={360}
+                            step={10}
+                        />
+                        <ToolButton onClick={() => setIsModalVisible(true)}>
+                            <FontAwesomeIcon icon={faEdit} /> Edit
+                        </ToolButton>
+                    </>
                 }
+
+
+                    <NavLink to={appSteps.IMAGE_UPLOAD}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> Image
+                    </NavLink>
+                    <div>&nbsp;|&nbsp;</div>
+                    <NavLink to={appSteps.OBJECTS}>
+                         Objects
+                    </NavLink>
+                    <div>&nbsp;|&nbsp;</div>
+                    <NavLink to={appSteps.BLOCKS}>
+                        Blocks <FontAwesomeIcon icon={faChevronRight} />
+                    </NavLink>
             </ToolbarRow>
+            {
+                toolItems && <ToolbarRow>
+                    {
+                        toolItems.map(item => {
+                            const Icon = typeof item.icon === 'function'
+                                ? <span />
+                                : item.icon;
+
+                            return (
+                                <ToolButton
+                                    key={item.id}
+                                    isSelected={blockToolSelected === item.id}
+                                    bgColor={item.color}
+                                    onClick={() => setBlockToolSelected(item.id)}
+                                >
+                                    {Icon}{' '}{item.name}
+                                </ToolButton>
+                            )
+                        })
+                    }
+                </ToolbarRow>
+            }
         </ToolbarWrapper>
     )
 }
