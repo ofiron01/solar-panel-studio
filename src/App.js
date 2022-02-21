@@ -77,20 +77,22 @@ function App({step}) {
     return (
         <div>
             {
-                step !== appSteps.IMAGE_UPLOAD ?
-                <Stage
-                    step={step}
-                    zoomLevel={stageZoom}
-                    gridOpacity={gridOpacity}
-                    rotation={stageRotation}
-                    blockToolSelected={blockToolSelected}
-                    projectData={{
-                        ...projectState,
-                        satImageUrl: projectState.image || '',
-                    }}
-                    handleDataChange={data => setProjectState(data)}
-                />
-                    :<ImageUpload handleDataChange={data => setProjectState({
+                step !== appSteps.IMAGE_UPLOAD
+                    ? <Stage
+                        step={step}
+                        zoomLevel={stageZoom}
+                        gridOpacity={gridOpacity}
+                        rotation={stageRotation}
+                        blockToolSelected={blockToolSelected}
+                        projectData={{
+                            ...projectState,
+                            satImageUrl: projectState.image || '',
+                        }}
+                        handleDataChange={data => setProjectState(data)}
+                    />
+                    : <ImageUpload
+                        projectState={projectState}
+                        handleDataChange={data => setProjectState({
                     ...projectState,
                     ...data,
                     })} />

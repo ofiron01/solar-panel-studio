@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styled from "styled-components";
 import SiteCanvas from "./SiteCanvas";
 import {ToolButton} from "./Toolbar";
@@ -10,7 +10,8 @@ import {appSteps} from "../constants";
 const Wrapper = styled.div`
   margin-top: 150px;
   color: #ffffff;
-`
+`;
+
 const StageContent = styled.div`
     display: flex;
     justify-content: center;
@@ -18,7 +19,6 @@ const StageContent = styled.div`
     flex-direction: column;
     transform-origin: center center;
     transition: 0.25s all;
-    //margin-top: 100px;
     transform: ${({rotation, zoom}) => `rotate(${rotation}deg) scale(${zoom})`};
 `;
 
@@ -41,18 +41,31 @@ const Instructions = styled.div`
 
 const api = 'https://organuz.flamiingo.com/blocks.php';
 
-function ImageUpload({handleDataChange}) {
-    const [image, setImage] = useState(null);
+function ImageUpload({projectState, handleDataChange}) {
+
+    const updateImageStateFromSource = (src) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = function () {
+            setImage(this);
+        }
+    }
     const [isSaving, setIsSaving] = useState(false);
-    const [projectImage, setProjectImage] = useState(null);
-    const [coordinates, setCoordinates] = useState([]);
+    const [projectImage, setProjectImage] = useState(projectState.image ?? null);
+    const [image, setImage] = useState(null );
+    const [coordinates, setCoordinates] = useState(projectState.roof ?? []);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        updateImageStateFromSource(projectImage);
+    }, [projectImage]);
 
     const onOptimizeSuccess = (data) => {
         console.log(data);
         handleDataChange(data);
     }
+
     const handleClick = evt => {
         const x = evt.nativeEvent.offsetX;
         const y = evt.nativeEvent.offsetY;
@@ -62,7 +75,7 @@ function ImageUpload({handleDataChange}) {
             ...coordinates,
             x,
             y,
-        ])
+        ]);
     }
 
     const onSave = async () => {
@@ -101,12 +114,7 @@ function ImageUpload({handleDataChange}) {
             const reader = new FileReader();
             reader.onload = async function (e) {
                 setProjectImage(e.target.result);
-
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function () {
-                    setImage(this)
-                }
+                updateImageStateFromSource(e.target.result);
             };
             reader.readAsDataURL(evt.target.files[0]);
         }
@@ -138,7 +146,7 @@ function ImageUpload({handleDataChange}) {
                 disabled={coordinates.length < 2}
                 onClick={onSave}>{
                 isSaving
-                    ? <FontAwesomeIcon icon={faSpinner} />
+                    ? <FontAwesomeIcon icon={faSpinner} spin />
                     : 'Save'
             }</ToolButton>
         </ButtonsWrapper>

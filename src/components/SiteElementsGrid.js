@@ -25,6 +25,7 @@ const BlockWrapper = styled.div`
     width: ${props => props.size}px;
     height: ${props => props.size}px;
     transform: rotate(${props => props.rotation}deg);
+    box-sizing: border-box;
 `;
 
 const mapBlockTypeToIcon = (type, blockSize, text) => {
