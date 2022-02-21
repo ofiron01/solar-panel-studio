@@ -13,6 +13,7 @@ import {
 import LevelIcon from "./components/LevelIcon";
 
 export const appSteps = {
+    IMAGE_UPLOAD: '/image-upload',
     OBJECTS: '/objects',
     BLOCKS: '/blocks',
 };

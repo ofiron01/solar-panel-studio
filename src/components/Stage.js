@@ -96,12 +96,18 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
     return (
         <StageWrapper>
             <StageContent zoom={zoomLevel} rotation={rotation}>
-                <img alt="Roof" src={projectData.satImageUrl} />
-                <SiteCanvas
-                    width={image.width}
-                    height={image.height}
-                    coordinates={projectData.roof}
-                />
+                {
+                    projectData.satImageUrl &&
+                    <img alt="Roof" src={projectData.satImageUrl} />
+                }
+                {
+                    projectData?.roof?.length > 0 &&
+                    <SiteCanvas
+                        width={image.width}
+                        height={image.height}
+                        coordinates={projectData.roof}
+                    />
+                }
 
                 <SiteElementsGrid
                     onClick={handleGridClick}

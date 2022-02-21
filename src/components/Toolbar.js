@@ -29,7 +29,7 @@ const ToolbarRow = styled.div`
   align-items: center;
 `;
 
-const ToolButton = styled.button`
+export const ToolButton = styled.button`
   width: 80px;
   height: 40px;
   margin: 5px;
@@ -39,6 +39,9 @@ const ToolButton = styled.button`
   box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
   border-radius: 5px;
   border: ${({isSelected}) => isSelected ? '1px solid #313131' : 'none'};
+  &[disabled] {
+    cursor: default;
+  }
 `;
 
 const StyledDisabledLink = styled.span`
@@ -78,62 +81,74 @@ function Toolbar({
     return (
         <ToolbarWrapper>
             <ToolbarRow>
-                    <RangeInput
-                        label="Zoom"
-                        value={stageZoom}
-                        onChange={setStageZoom}
-                        min={1}
-                        max={10}
-                        step={1}
-                    />
-                    <RangeInput
-                        label="Opacity"
-                        value={gridOpacity}
-                        onChange={setGridOpacity}
-                        min={0}
-                        max={100}
-                        step={10}
-                    />
-                    <RangeInput
-                        label="Rotation"
-                        value={stageRotation}
-                        onChange={setStageRotation}
-                        min={0}
-                        max={360}
-                        step={10}
-                    />
+                {
+                    toolItems &&
+                    <>
+                        <RangeInput
+                            label="Zoom"
+                            value={stageZoom}
+                            onChange={setStageZoom}
+                            min={1}
+                            max={10}
+                            step={1}
+                        />
+                        <RangeInput
+                            label="Opacity"
+                            value={gridOpacity}
+                            onChange={setGridOpacity}
+                            min={0}
+                            max={100}
+                            step={10}
+                        />
+                        <RangeInput
+                            label="Rotation"
+                            value={stageRotation}
+                            onChange={setStageRotation}
+                            min={0}
+                            max={360}
+                            step={10}
+                        />
+                        <ToolButton onClick={() => setIsModalVisible(true)}>
+                            <FontAwesomeIcon icon={faEdit} /> Edit
+                        </ToolButton>
+                    </>
+                }
 
-                    <ToolButton onClick={() => setIsModalVisible(true)}>
-                        <FontAwesomeIcon icon={faEdit} /> Edit
-                    </ToolButton>
+
+                    <NavLink to={appSteps.IMAGE_UPLOAD}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> Image
+                    </NavLink>
+                    <div>&nbsp;|&nbsp;</div>
                     <NavLink to={appSteps.OBJECTS}>
-                        <FontAwesomeIcon icon={faChevronLeft} /> Objects
+                         Objects
                     </NavLink>
                     <div>&nbsp;|&nbsp;</div>
                     <NavLink to={appSteps.BLOCKS}>
                         Blocks <FontAwesomeIcon icon={faChevronRight} />
                     </NavLink>
             </ToolbarRow>
-            <ToolbarRow>
-                {
-                    toolItems.map(item => {
-                        const Icon = typeof item.icon === 'function'
-                            ? <span />
-                            : item.icon;
+            {
+                toolItems && <ToolbarRow>
+                    {
+                        toolItems.map(item => {
+                            const Icon = typeof item.icon === 'function'
+                                ? <span />
+                                : item.icon;
 
-                        return (
-                            <ToolButton
-                                key={item.id}
-                                isSelected={blockToolSelected === item.id}
-                                bgColor={item.color}
-                                onClick={() => setBlockToolSelected(item.id)}
-                            >
-                                {Icon}{' '}{item.name}
-                            </ToolButton>
-                        )
-                    })
-                }
-            </ToolbarRow>
+                            return (
+                                <ToolButton
+                                    key={item.id}
+                                    isSelected={blockToolSelected === item.id}
+                                    bgColor={item.color}
+                                    onClick={() => setBlockToolSelected(item.id)}
+                                >
+                                    {Icon}{' '}{item.name}
+                                </ToolButton>
+                            )
+                        })
+                    }
+                </ToolbarRow>
+            }
         </ToolbarWrapper>
     )
 }

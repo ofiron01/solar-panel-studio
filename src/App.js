@@ -1,12 +1,11 @@
 import Stage from "./components/Stage";
-import RoofSatImage from "./assets/sat01.png";
-
 import data from "./mock/sat01.json";
 import {useEffect, useState} from "react";
 import {appSteps, toolbarItemsMap} from "./constants";
 import Toolbar from "./components/Toolbar";
 import {useNavigate, useLocation} from "react-router-dom";
 import StateDialog from "./components/StateDialog";
+import ImageUpload from "./components/ImageUpload";
 
 const useDebouncedEffect = (effect, deps, delay) => {
     useEffect(() => {
@@ -24,17 +23,18 @@ function App({step}) {
     const [stageZoom, setStageZoom] = useState(projectState.viewZoom);
     const [gridOpacity, setGridOpacity] = useState(100);
     const [stageRotation, setStageRotation] = useState(projectState.viewOrientation);
-    const [blockToolSelected, setBlockToolSelected] = useState(toolbarItemsMap[step][0].id);
+    const [blockToolSelected, setBlockToolSelected] = useState(step !== appSteps.IMAGE_UPLOAD ? toolbarItemsMap[step][0].id : null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
 
     //init setBlockToolSelected
     useEffect(() => {
-        //console.log(pathname);
         if (pathname === '/') {
-            navigate(appSteps.OBJECTS);
+            navigate(appSteps.IMAGE_UPLOAD);
         }
-        setBlockToolSelected(toolbarItemsMap[step][0].id);
+        if (step !== appSteps.IMAGE_UPLOAD) {
+            setBlockToolSelected(toolbarItemsMap[step][0].id);
+        }
     }, [pathname, step, navigate]);
 
     //Update project state whenever stage zoom and rotation changes
@@ -76,18 +76,26 @@ function App({step}) {
 
     return (
         <div>
-            <Stage
-                step={step}
-                zoomLevel={stageZoom}
-                gridOpacity={gridOpacity}
-                rotation={stageRotation}
-                blockToolSelected={blockToolSelected}
-                projectData={{
+            {
+                step !== appSteps.IMAGE_UPLOAD ?
+                <Stage
+                    step={step}
+                    zoomLevel={stageZoom}
+                    gridOpacity={gridOpacity}
+                    rotation={stageRotation}
+                    blockToolSelected={blockToolSelected}
+                    projectData={{
+                        ...projectState,
+                        satImageUrl: projectState.image || '',
+                    }}
+                    handleDataChange={data => setProjectState(data)}
+                />
+                    :<ImageUpload handleDataChange={data => setProjectState({
                     ...projectState,
-                    satImageUrl: RoofSatImage,
-                }}
-                handleDataChange={data => setProjectState(data)}
-            />
+                    ...data,
+                    })} />
+            }
+
             <Toolbar
                 toolItems={toolbarItemsMap[step]}
                 gridOpacity={gridOpacity}
