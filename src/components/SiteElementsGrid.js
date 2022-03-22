@@ -22,24 +22,29 @@ const BlockWrapper = styled.div`
     transform-origin: top left;
     left: ${props => props.leftPosition}px;
     top: ${props => props.topPosition}px;
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
+    width: ${props => props.size.width}px;
+    height: ${props => props.size.height}px;
     transform: rotate(${props => props.rotation}deg);
     box-sizing: border-box;
 `;
 
 const mapBlockTypeToIcon = (type, blockSize, text) => {
+    const trimmedBlockSize = {
+        width: blockSize.width > 2  ? blockSize.width - 2 : blockSize.width,
+        height: blockSize.height > 2 ? blockSize.height - 2 : blockSize.height,
+    }
+    console.log(trimmedBlockSize);
     switch (type) {
         case gridBlockTypes.BLOCKED.id:
             return gridBlockTypes.BLOCKED.icon;
         case gridBlockTypes.LEVEL_A.id:
-            return gridBlockTypes.LEVEL_A.icon({blockSize, text});
+            return gridBlockTypes.LEVEL_A.icon({blockSize: trimmedBlockSize, text});
         case gridBlockTypes.LEVEL_B.id:
-            return gridBlockTypes.LEVEL_B.icon({blockSize, text});
+            return gridBlockTypes.LEVEL_B.icon({blockSize: trimmedBlockSize, text});
         case gridBlockTypes.LEVEL_C.id:
-            return gridBlockTypes.LEVEL_C.icon({blockSize, text});
+            return gridBlockTypes.LEVEL_C.icon({blockSize: trimmedBlockSize, text});
         case gridBlockTypes.LEVEL_D.id:
-            return gridBlockTypes.LEVEL_D.icon({blockSize, text});
+            return gridBlockTypes.LEVEL_D.icon({blockSize: trimmedBlockSize, text});
         case gridBlockTypes.SHAPE_DIRECTION_WEST.id:
             return gridBlockTypes.SHAPE_DIRECTION_WEST.icon;
         case gridBlockTypes.SHAPE_DIRECTION_EAST.id:
@@ -53,7 +58,7 @@ const mapBlockTypeToIcon = (type, blockSize, text) => {
     }
 }
 
-function SiteElementsGrid({width, height, blocks, blockSize, onClick, gridOpacity, orientation, isDisabled}) {
+function SiteElementsGrid({width, height, blocks, onClick, gridOpacity, orientation, isDisabled}) {
 
     return <GridWrapper
         width={width}
@@ -68,7 +73,7 @@ function SiteElementsGrid({width, height, blocks, blockSize, onClick, gridOpacit
         }}>
         {
             blocks.map((block, index) => {
-                const [x, y, type] = block;
+                const [x, y, width, height, type] = block;
                 const levelName = type?.split('-')[1] ?? ''
                 return (
                     <BlockWrapper
@@ -77,9 +82,9 @@ function SiteElementsGrid({width, height, blocks, blockSize, onClick, gridOpacit
                         rotation={orientation}
                         leftPosition={x}
                         topPosition={y}
-                        size={blockSize}>
+                        size={{width, height}}>
                         {
-                            mapBlockTypeToIcon(type, blockSize, levelName)
+                            mapBlockTypeToIcon(type, {width, height}, levelName)
                         }
                     </BlockWrapper>
                 );

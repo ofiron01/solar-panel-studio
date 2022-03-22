@@ -22,6 +22,8 @@ const StageContent = styled.div`
     transform: ${({rotation, zoom}) => `rotate(${rotation}deg) scale(${zoom})`};
 `;
 
+const BLOCK_ID_INDEX = 4;
+
 function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, rotation, handleDataChange}) {
     const [gridState, setGridState] = useState(projectData.blocks);
     const [obstaclePlacementState, setObstaclePlacementState] = useState(projectData.objects)
@@ -34,7 +36,7 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
                 index === parseInt(evt.target.parentElement.dataset.blockid)
             ) {
                 console.log(blockToolSelected);
-                block[2] = blockToolSelected;
+                block[BLOCK_ID_INDEX] = blockToolSelected;
             }
             return block;
         })
@@ -114,7 +116,6 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
                     width={image.width}
                     height={image.height}
                     blocks={gridState}
-                    blockSize={projectData.blockSize}
                     orientation={projectData.orientation}
                     gridOpacity={gridOpacity}
                     isDisabled={step !== appSteps.BLOCKS}
