@@ -3,5 +3,6 @@
 	"blocks": [],
 	"viewZoom": 1,
 	"viewOrientation": 0,
+	"blockOrientation": 100,
 	"viewRoute": "/objects"
 }

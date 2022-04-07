@@ -116,7 +116,7 @@ function Stage({step, projectData, zoomLevel, gridOpacity, blockToolSelected, ro
                     width={image.width}
                     height={image.height}
                     blocks={gridState}
-                    orientation={projectData.orientation}
+                    blockOrientation={projectData.blockOrientation}
                     gridOpacity={gridOpacity}
                     isDisabled={step !== appSteps.BLOCKS}
                 />

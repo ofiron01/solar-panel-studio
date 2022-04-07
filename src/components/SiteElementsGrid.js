@@ -19,7 +19,7 @@ const BlockWrapper = styled.div`
     font-family: Arial, sans-serif;
     text-transform: capitalize;
     line-height: 1.5;
-    transform-origin: top left;
+    transform-origin: center;
     left: ${props => props.leftPosition}px;
     top: ${props => props.topPosition}px;
     width: ${props => props.size.width}px;
@@ -58,7 +58,7 @@ const mapBlockTypeToIcon = (type, blockSize, text) => {
     }
 }
 
-function SiteElementsGrid({width, height, blocks, onClick, gridOpacity, orientation, isDisabled}) {
+function SiteElementsGrid({width, height, blocks, onClick, gridOpacity, blockOrientation, isDisabled}) {
 
     return <GridWrapper
         width={width}
@@ -79,7 +79,7 @@ function SiteElementsGrid({width, height, blocks, onClick, gridOpacity, orientat
                     <BlockWrapper
                         data-blockid={index}
                         key={index}
-                        rotation={orientation}
+                        rotation={blockOrientation}
                         leftPosition={x}
                         topPosition={y}
                         size={{width, height}}>
