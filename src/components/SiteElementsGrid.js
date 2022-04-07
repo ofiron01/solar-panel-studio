@@ -19,7 +19,7 @@ const BlockWrapper = styled.div`
     font-family: Arial, sans-serif;
     text-transform: capitalize;
     line-height: 1.5;
-    transform-origin: center;
+    transform-origin: top left;
     left: ${props => props.leftPosition}px;
     top: ${props => props.topPosition}px;
     width: ${props => props.size.width}px;
